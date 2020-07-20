@@ -1,11 +1,14 @@
 package fr.ath.kata.di;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ComponentRegistry {
 
+    boolean dependenciesInjected = false;
     Map<Class, Object> registry = new HashMap<>();
 
     public void register(Class componentClass) {
@@ -17,11 +20,42 @@ public class ComponentRegistry {
     }
 
     public <T> T fetch(Class<T> componentClass) {
+        if(!dependenciesInjected){
+            injectDependencies();
+        }
         return (T) registry.get(componentClass);
     }
 
     private <T> T instanciate(Class<T> componentClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return componentClass.getDeclaredConstructor().newInstance();
+    }
+
+    private void injectDependencies() {
+
+        registry.keySet().forEach(this::injectDependencies);
+        dependenciesInjected = true;
+    }
+
+    private void injectDependencies(Class componentClass) {
+        Stream.of(componentClass.getMethods())
+                .filter(m -> m.getName().startsWith("set"))
+                .forEach(this::applySetter);
+    }
+
+    private void applySetter(Method setter) {
+        try {
+            setter.invoke(getBean(setter), getFieldToInject(setter));
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw  new RuntimeException("Unable to apply setter " + setter.toString(), e);
+        }
+    }
+
+    private Object getFieldToInject(Method setter) {
+        return registry.get(setter.getParameterTypes()[0]);
+    }
+
+    private Object getBean(Method setter) {
+        return registry.get(setter.getDeclaringClass());
     }
 
 }

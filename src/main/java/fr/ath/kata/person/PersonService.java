@@ -2,9 +2,9 @@ package fr.ath.kata.person;
 
 public class PersonService {
 
-    private PersonRepository personRepository;
+    private InMemoryPersonRepository personRepository;
 
-    public void setPersonRepository(PersonRepository personRepository) {
+    public void setPersonRepository(InMemoryPersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
