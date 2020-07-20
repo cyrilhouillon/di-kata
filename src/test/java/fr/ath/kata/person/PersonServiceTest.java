@@ -19,6 +19,7 @@ class PersonServiceTest {
                 new Person("Odile", "Croq"));
 
         PersonService personService = new PersonService();
+        personService.setPersonRepository(new InMemoryPersonRepository());
 
         persons.forEach(personService::save);
 

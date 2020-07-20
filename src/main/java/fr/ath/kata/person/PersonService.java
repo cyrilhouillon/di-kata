@@ -4,8 +4,8 @@ public class PersonService {
 
     private PersonRepository personRepository;
 
-    public PersonService() {
-        personRepository = new PersonRepository();
+    public void setPersonRepository(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
 
