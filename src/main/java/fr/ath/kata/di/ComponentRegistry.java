@@ -44,7 +44,11 @@ public class ComponentRegistry {
 
     private void applySetter(Method setter) {
         try {
-            setter.invoke(getBean(setter), getFieldToInject(setter));
+            Object fieldToInject = getFieldToInject(setter);
+            if(fieldToInject == null){
+                throw new RuntimeException("Missing depencie : " + setter.getParameterTypes()[0] + " needed for bean " + setter.getDeclaringClass());
+            }
+            setter.invoke(getBean(setter), fieldToInject);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw  new RuntimeException("Unable to apply setter " + setter.toString(), e);
         }
