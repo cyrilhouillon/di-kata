@@ -43,17 +43,16 @@ public class ComponentRegistry {
 
     private void injectDependencies() {
 
-        registry.keySet().forEach(this::injectDependencies);
+        registry.values().forEach(this::injectDependencies);
         dependenciesInjected = true;
     }
 
-    private void injectDependencies(Class componentClass) {
-        Object bean = registry.get(componentClass);
+    private void injectDependencies(Object bean) {
         if(dependenciesInjectedBeans.contains(bean)){
             return;
         }
 
-        Stream.of(componentClass.getMethods())
+        Stream.of(bean.getClass().getMethods())
                 .filter(m -> m.getName().startsWith("set"))
                 .forEach(this::applySetter);
         dependenciesInjectedBeans.add(bean);
