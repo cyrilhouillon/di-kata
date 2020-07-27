@@ -1,6 +1,5 @@
 package fr.ath.kata.person;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -18,7 +17,7 @@ class PersonServiceTest {
                 new Person("Pierre", "Martinet"),
                 new Person("Odile", "Croq"));
 
-        PersonService personService = new PersonService();
+        PersonServiceWithImplementationDependencie personService = new PersonServiceWithImplementationDependencie();
         personService.setPersonRepository(new InMemoryPersonRepository());
 
         persons.forEach(personService::save);

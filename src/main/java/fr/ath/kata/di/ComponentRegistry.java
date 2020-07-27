@@ -17,6 +17,9 @@ public class ComponentRegistry {
             Class clazz = componentClass;
             while(!Object.class.equals(clazz)){
                 registry.put(clazz, instance);
+                for (Class interfaze: clazz.getInterfaces()) {
+                    registry.put(interfaze, instance);
+                }
                 clazz = clazz.getSuperclass();
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
