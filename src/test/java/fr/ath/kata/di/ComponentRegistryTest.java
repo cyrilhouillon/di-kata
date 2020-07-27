@@ -67,6 +67,19 @@ class ComponentRegistryTest {
         testPersonService(result);
     }
 
+    @Test
+    void should_allow_any_subclasses_level_as_dependency_candidate() {
+
+        ComponentRegistry componentRegistry = new ComponentRegistry();
+
+        componentRegistry.register(PersonService.class);
+        componentRegistry.register(InMemoryRepositorySubSubclass.class);
+
+        PersonService result = componentRegistry.fetch(PersonService.class);
+
+        testPersonService(result);
+    }
+
     private void testPersonService(PersonService result) {
         List<Person> persons = Arrays.asList(
                 new Person("Pierre", "Martinet"),

@@ -14,8 +14,11 @@ public class ComponentRegistry {
     public void register(Class componentClass) {
         try {
             Object instance = instanciate(componentClass);
-            registry.put(componentClass, instance);
-            registry.put(componentClass.getSuperclass(), instance);
+            Class clazz = componentClass;
+            while(!Object.class.equals(clazz)){
+                registry.put(clazz, instance);
+                clazz = clazz.getSuperclass();
+            }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new RuntimeException("Error while instanciate "+componentClass, e);
         }
