@@ -13,7 +13,9 @@ public class ComponentRegistry {
 
     public void register(Class componentClass) {
         try {
-            registry.put(componentClass, instanciate(componentClass));
+            Object instance = instanciate(componentClass);
+            registry.put(componentClass, instance);
+            registry.put(componentClass.getSuperclass(), instance);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new RuntimeException("Error while instanciate "+componentClass, e);
         }

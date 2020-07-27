@@ -1,6 +1,8 @@
 package fr.ath.kata.di;
 
 import fr.ath.kata.person.InMemoryPersonRepository;
+import fr.ath.kata.person.InMemoryRepositorySubSubclass;
+import fr.ath.kata.person.InMemoryRepositorySubclass;
 import fr.ath.kata.person.Person;
 import fr.ath.kata.person.PersonService;
 import org.assertj.core.api.Assertions;
@@ -50,6 +52,19 @@ class ComponentRegistryTest {
 
         assertThatThrownBy(() -> componentRegistry.fetch(PersonService.class))
                 .hasMessage("Missing depencie : class fr.ath.kata.person.InMemoryPersonRepository needed for bean class fr.ath.kata.person.PersonService");
+    }
+
+    @Test
+    void should_allow_subclasses_as_dependency_candidate() {
+
+        ComponentRegistry componentRegistry = new ComponentRegistry();
+
+        componentRegistry.register(PersonService.class);
+        componentRegistry.register(InMemoryRepositorySubclass.class);
+
+        PersonService result = componentRegistry.fetch(PersonService.class);
+
+        testPersonService(result);
     }
 
     private void testPersonService(PersonService result) {
