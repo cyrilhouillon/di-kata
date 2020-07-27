@@ -1,5 +1,6 @@
 package fr.ath.kata.di;
 
+import fr.ath.kata.person.CountinCallsPersonService;
 import fr.ath.kata.person.InMemoryPersonRepository;
 import fr.ath.kata.person.InMemoryRepositorySubSubclass;
 import fr.ath.kata.person.InMemoryRepositorySubclass;
@@ -105,6 +106,20 @@ class ComponentRegistryTest {
         PersonService result = componentRegistry.fetch(PersonService.class);
 
         testPersonService(result);
+    }
+
+    @Test
+    void should_inject_dependencies_only_once() {
+
+        ComponentRegistry componentRegistry = new ComponentRegistry();
+
+        componentRegistry.register(CountinCallsPersonService.class);
+        componentRegistry.register(InMemoryPersonRepository.class);
+
+        CountinCallsPersonService result = (CountinCallsPersonService) componentRegistry.fetch(PersonService.class);
+
+        assertThat(result.getSetterCalls()).isEqualTo(1);
+
     }
 
     private void testPersonService(PersonService result) {

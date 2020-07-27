@@ -3,13 +3,16 @@ package fr.ath.kata.di;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ComponentRegistry {
 
     boolean dependenciesInjected = false;
     Map<Class, Object> registry = new HashMap<>();
+    Set<Object> dependenciesInjectedBeans = new HashSet<>();
 
     public void register(Class componentClass) {
         try {
@@ -45,9 +48,15 @@ public class ComponentRegistry {
     }
 
     private void injectDependencies(Class componentClass) {
+        Object bean = registry.get(componentClass);
+        if(dependenciesInjectedBeans.contains(bean)){
+            return;
+        }
+
         Stream.of(componentClass.getMethods())
                 .filter(m -> m.getName().startsWith("set"))
                 .forEach(this::applySetter);
+        dependenciesInjectedBeans.add(bean);
     }
 
     private void applySetter(Method setter) {
