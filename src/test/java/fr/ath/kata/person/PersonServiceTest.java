@@ -7,23 +7,30 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PersonServiceTest {
+public class PersonServiceTest {
 
     @Test
     // the test will fail
     void personService_should_return_exact_count_of_saved_persons() {
 
-        List<Person> persons = Arrays.asList(
-                new Person("Pierre", "Martinet"),
-                new Person("Odile", "Croq"));
 
         PersonServiceWithImplementationDependencie personService = new PersonServiceWithImplementationDependencie();
         personService.setPersonRepository(new InMemoryPersonRepository());
 
-        persons.forEach(personService::save);
-
-        assertThat(personService.getMobSize()).isEqualTo(persons.size());
+        testPersonService(personService);
 
     }
+
+    public static void testPersonService(PersonService service) {
+        List<Person> persons = Arrays.asList(
+                new Person("Pierre", "Martinet"),
+                new Person("Odile", "Croq"));
+
+        persons.forEach(service::save);
+
+        assertThat(service.getMobSize()).isEqualTo(persons.size());
+    }
+
+
 
 }

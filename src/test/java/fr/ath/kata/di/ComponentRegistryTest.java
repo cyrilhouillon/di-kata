@@ -4,15 +4,12 @@ import fr.ath.kata.person.CountinCallsPersonService;
 import fr.ath.kata.person.InMemoryPersonRepository;
 import fr.ath.kata.person.InMemoryRepositorySubSubclass;
 import fr.ath.kata.person.InMemoryRepositorySubclass;
-import fr.ath.kata.person.Person;
 import fr.ath.kata.person.PersonService;
 import fr.ath.kata.person.PersonServiceWithImplementationDependencie;
 import fr.ath.kata.person.PersonServiceWithInterfaceDependencie;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
+import static fr.ath.kata.person.PersonServiceTest.testPersonService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -122,14 +119,5 @@ class ComponentRegistryTest {
 
     }
 
-    private void testPersonService(PersonService result) {
-        List<Person> persons = Arrays.asList(
-                new Person("Pierre", "Martinet"),
-                new Person("Odile", "Croq"));
-
-        persons.forEach(result::save);
-
-        assertThat(result.getMobSize()).isEqualTo(persons.size());
-    }
 
 }

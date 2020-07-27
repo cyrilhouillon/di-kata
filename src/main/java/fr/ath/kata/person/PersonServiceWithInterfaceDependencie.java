@@ -1,5 +1,8 @@
 package fr.ath.kata.person;
 
+import fr.ath.kata.di.annotations.Component;
+
+@Component
 public class PersonServiceWithInterfaceDependencie implements PersonService {
 
     private PersonRepository personRepository;
